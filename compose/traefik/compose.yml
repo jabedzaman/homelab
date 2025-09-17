@@ -1,0 +1,30 @@
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Mount the configuration file
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+
+      # Mount Docker socket for provider
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # Persistent storage for certificates
+      - ./certs:/etc/traefik/certs
+
+      # Log directory
+      - ./logs:/etc/traefik/log
+
+      # Basic auth users file
+      - ./users:/etc/traefik/users:ro
+
+      # Dynamic configuration directory
+      - ./config:/etc/traefik/config:ro
+    env_file:
+      - ./traefik.env
+    labels:
+      - "traefik.enable=true"

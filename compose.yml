@@ -1,0 +1,4 @@
+name: "homelab"
+
+include:
+  - ./compose/traefik/compose.yml

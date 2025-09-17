@@ -1,0 +1,118 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+# -- (Optional) Change Log Level and Format here...
+#     - loglevels [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+#     - format [common, json, logfmt]
+log:
+  level: DEBUG
+  format: json
+  filePath: /etc/traefik/log/traefik.log
+
+# -- (Optional) Enable Accesslog and change Format here...
+#     - format [common, json, logfmt]
+accesslog:
+  format: json
+  filePath: /etc/traefik/log/access.log
+
+# tracing: {}
+#  addInternals: true
+#  sampleRate: 1
+
+# metrics:
+  # prometheus:
+  #   entrypoint: metrics
+  #   addRoutersLabels: true
+  #   buckets:
+  #     - 0.1
+  #     - 0.3
+  #     - 1.2
+  #     - 5.0
+
+# -- (Optional) Enable API and Dashboard here, don't do in production
+api:
+  dashboard: true
+#  insecure: true
+
+# -- Change EntryPoints here...
+entryPoints:
+  http:
+    address: :80
+    # -- (Optional) Redirect all HTTP to HTTPS
+    # http:
+    #   redirections:
+    #     entryPoint:
+    #       to: websecure
+    #       scheme: https
+  https:
+    address: :443
+  metrics:
+    address: :9091
+  # -- (Optional) Dashboard does this on it's own. Leave it alone.
+#  custom:
+#    address: :8080
+
+http:
+  routers:
+    dashboard:
+      entryPoints:
+        - https
+      rule: Host(`traefik.jabed.dev`)
+      service: api@internal
+      tls:
+        certResolver: production
+        domains:
+        #  - main: "jabed.dev"
+         - sans: "*.jabed.dev"
+        #  - sans: "local.jabed.dev"
+        #  - sans: "*.local.jabed.dev"
+      middlewares:
+        - basic-auth
+  middlewares:
+    basic-auth:
+      basicAuth:
+        usersFile: /etc/traefik/users/users
+
+# -- Configure your CertificateResolver here...
+certificatesResolvers:
+  staging:
+    acme:
+      email: hi@jabed.dev
+      storage: /etc/traefik/certs/acme.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+  production:
+    acme:
+      email: hi@jabed.dev
+      storage: /etc/traefik/certs/acme-prod.json
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+  gen-stage:
+    acme:
+      email: hi@jabed.dev
+      storage: /etc/traefik/certs/acme-gen-stage.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: http
+  generic:
+    acme:
+      email: hi@jabed.dev
+      storage: /etc/traefik/certs/acme-generic.json
+      # tlsChallenge: {}
+      httpChallenge:
+        entryPoint: http
+providers:
+  docker:
+    # -- (Optional) Enable this, if you want to expose all containers automatically
+    exposedByDefault: false
+  file:
+    directory: /etc/traefik
+    watch: true

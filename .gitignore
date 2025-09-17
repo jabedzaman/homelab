@@ -1,5 +1,5 @@
 *.env
-!*.env.example
+!*.template.env
 .Trash-1000
 ..bfg-report
 .DS_Store
