@@ -50,8 +50,10 @@ entryPoints:
   metrics:
     address: :9091
   # -- (Optional) Dashboard does this on it's own. Leave it alone.
-#  custom:
-#    address: :8080
+  #  custom:
+  #    address: :8080
+  postgres: # postgres database 
+    address: :5432
 
 http:
   routers:

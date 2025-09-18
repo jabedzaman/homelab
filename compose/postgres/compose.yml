@@ -13,11 +13,12 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    # # temporary disabled Traefik for Postgres
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.docker.network=traefik-network"
-    #   # TCP routing for PostgreSQL
-    #   - "traefik.tcp.routers.postgres.rule=HostSNI(`postgres.jabed.dev`)"
-    #   - "traefik.tcp.routers.postgres.entrypoints=postgres"
-    #   - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=homelab_default"
+      # TCP routing for PostgreSQL
+      - "traefik.tcp.routers.postgres.rule=HostSNI(`postgres.jabed.dev`)"
+      - "traefik.tcp.routers.postgres.entrypoints=postgres"
+      - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
+      - "traefik.tcp.routers.postgres.tls=true" # Add if you want TLS
+      - "traefik.tcp.routers.postgres.tls.certresolver=production" # Add if using TLS
