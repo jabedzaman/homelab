@@ -15,10 +15,9 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=homelab_default"
-      # TCP routing for PostgreSQL
       - "traefik.tcp.routers.postgres.rule=HostSNI(`postgres.jabed.dev`)"
-      - "traefik.tcp.routers.postgres.entrypoints=postgres"
       - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
-      - "traefik.tcp.routers.postgres.tls=true" # Add if you want TLS
-      - "traefik.tcp.routers.postgres.tls.certresolver=production" # Add if using TLS
+      - "traefik.tcp.routers.services=postgres"
+      - "traefik.tcp.routers.postgres.entrypoints=postgres"
+      - "traefik.tcp.routers.postgres.tls=true"
+      - "traefik.tcp.routers.postgres.tls.certresolver=production"
