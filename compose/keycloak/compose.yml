@@ -5,8 +5,16 @@ services:
     restart: unless-stopped
     env_file:
       - ./keycloak.env
+    entrypoint: /bin/sh
     command:
-      - start-dev
+      - -c
+      - |
+        set -ex
+        # Copy all plugin JARs from the mounted volume into Keycloak's providers folder
+        cp /tmp/plugins/*.jar /opt/keycloak/providers
+        /opt/keycloak/bin/kc.sh start-dev
+    volumes:
+      - ./plugins:/tmp/plugins:ro # plugin JARs mounted here
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.entrypoints=https"
