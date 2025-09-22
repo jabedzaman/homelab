@@ -1,0 +1,2 @@
+CREATE DATABASE oidc;
+ALTER DATABASE oidc OWNER to jabed;
