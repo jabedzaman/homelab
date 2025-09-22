@@ -3,4 +3,4 @@ name: "homelab"
 include:
   - ./compose/traefik/compose.yml
   - ./compose/postgres/compose.yml
-  - ./compose/keycloak/compose.yml
+  - ./compose/logto/compose.yml

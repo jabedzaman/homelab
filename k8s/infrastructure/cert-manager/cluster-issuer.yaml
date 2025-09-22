@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-dns-cloudflare
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: hi@jabed.dev          
+    privateKeySecretRef:
+      name: letsencrypt-dns-cloudflare
+    solvers:
+    - dns01:
+        cloudflare:
+          # cert-manager will look up this secret in namespace cert-manager
+          apiTokenSecretRef:
+            name: cloudflare-api-token
+            key: api-token

@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jabed-wildcard
+  namespace: traefik
+spec:
+  secretName: jabed-wildcard-tls
+  subject:
+    organizations: []
+  dnsNames:
+    - "*.jabed.dev"
+    # - "jabed.dev"
+  issuerRef:
+    name: letsencrypt-dns-cloudflare
+    kind: ClusterIssuer
