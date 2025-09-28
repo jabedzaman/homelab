@@ -1,0 +1,110 @@
+# Deployment configuration
+deployment:
+  replicas: 1
+
+# Service configuration
+service:
+  type: LoadBalancer
+  spec:
+    loadBalancerIP: "152.53.243.185"
+  annotations: {}
+
+# Ports configuration
+ports:
+  web:
+    port: 80
+    exposedPort: 80
+    redirectTo: websecure
+  websecure:
+    port: 443
+    exposedPort: 443
+    tls:
+      enabled: true
+
+# Enable dashboard
+api:
+  dashboard: true
+  debug: false
+
+# Pilot token (optional)
+pilot:
+  enabled: false
+
+# Enable access logs
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+
+# Metrics
+metrics:
+  prometheus:
+    enabled: true
+    service:
+      enabled: true
+
+# SSL Configuration
+certificatesResolvers: {}
+
+# Additional configuration
+additionalArguments:
+  - "--serversTransport.insecureSkipVerify=true"
+  - "--providers.kubernetesingress.ingressendpoint.useDefaultPublishedService=true"
+
+# Resource limits
+resources:
+  requests:
+    cpu: 100m
+    memory: 50Mi
+  limits:
+    cpu: 300m
+    memory: 150Mi
+
+# Node selector for specific nodes (optional)
+nodeSelector: {}
+
+# Tolerations (optional)
+tolerations: []
+
+# Affinity rules
+affinity: {}
+
+# Security context
+securityContext:
+  capabilities:
+    drop: [ALL]
+    add: [NET_BIND_SERVICE]
+  readOnlyRootFilesystem: true
+  runAsGroup: 65532
+  runAsNonRoot: true
+  runAsUser: 65532
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 65532
+
+# Volume mounts for additional configuration
+volumes:
+  - name: traefik-config
+    mountPath: /etc/traefik/dynamic
+    type: configMap
+
+# Environment variables
+env:
+  - name: CF_API_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-credentials
+        key: email
+  - name: CF_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-credentials
+        key: api-key
+
+# Persistence for ACME certificates
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: local-path
