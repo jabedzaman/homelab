@@ -1,0 +1,9 @@
+services:
+  redis:
+    image: bitnami/redis:latest
+    container_name: redis
+    env_file:
+      - ./redis.env
+    volumes:
+      - ./redis_data:/data
+    restart: unless-stopped

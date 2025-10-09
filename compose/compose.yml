@@ -1,6 +1,7 @@
 name: "homelab"
 
 include:
-  - ./logto/compose.yml
-  - ./postgres/compose.yml
-  - ./traefik/compose.yml
+  - ./services/logto/compose.yml
+  - ./services/postgres/compose.yml
+  - ./services/traefik/compose.yml
+  - ./services/redis/compose.yml
