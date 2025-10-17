@@ -1,9 +1,12 @@
 services:
   redis:
-    image: bitnami/redis:latest
+    image: redis:latest
     container_name: redis
-    env_file:
-      - ./redis.env
-    volumes:
-      - ./redis_data:/data
     restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis_data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+

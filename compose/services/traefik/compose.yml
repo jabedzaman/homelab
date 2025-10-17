@@ -6,7 +6,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "5432:5432" # postgres database
     volumes:
       # Mount the configuration file
       - ./traefik.yml:/etc/traefik/traefik.yml:ro

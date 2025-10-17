@@ -5,3 +5,4 @@ include:
   - ./services/postgres/compose.yml
   - ./services/traefik/compose.yml
   - ./services/redis/compose.yml
+  - ./services/mongo/compose.yml

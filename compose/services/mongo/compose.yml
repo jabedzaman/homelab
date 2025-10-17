@@ -1,0 +1,18 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: unless-stopped
+    volumes:
+      - ./data/mongo/db:/data/db
+    ports:
+      - "27017:27017"
+    env_file:
+      - ./mongo.env
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.tcp.routers.mongodb.entrypoints=mongodb"
+    #   - "traefik.tcp.routers.mongodb.rule=HostSNI(`mongo.jabed.dev`)"
+    #   - "traefik.tcp.routers.mongodb.tls=true"
+    #   - "traefik.tcp.routers.mongodb.tls.certresolver=production"
+    #   - "traefik.tcp.services.mongodb.loadbalancer.server.port=27017"
